@@ -62,7 +62,7 @@ def pay_recall():
     content = content.rstrip("&")
     logging.debug("content: {}".format(content))
     sign = request.form.get("sign")
-    
+
     # 去除不参与验签的
     # 验签
     pub_key = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIW1g+KAqqOeC1ypte8L3qTDk2nz6jUbM6o6Jg9obvivPnCAm/wZvV3jWbYWfOuO/wrFJygn/jZqf8cR1T1CQa8CAwEAAQ=="
