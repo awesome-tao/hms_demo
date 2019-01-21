@@ -53,16 +53,22 @@ def userlogin():
 @hms_api.route('/payrecall', methods=["POST"])
 def pay_recall():
     # 获取源串
-    urlencoded_str = request.get_data()
-    logging.debug("urlencoded_str.decode(): {}".format(urlencoded_str.decode()))
-    data = unquote_plus(urlencoded_str.decode()).split("&signType")[0]
-    logging.debug("data: {}".format(data))
+    content = ""
+    for i in request.form:
+        if i != "sign" and i != "signType":
+            content += "{}={}&".format(i, request.form.get(i))
+        else:
+            pass
+    content = content.rstrip("&")
+    logging.debug("content: {}".format(content))
     sign = request.form.get("sign")
-    logging.debug("sign: {}".format(sign))
+    
     # 去除不参与验签的
     # 验签
     pub_key = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIW1g+KAqqOeC1ypte8L3qTDk2nz6jUbM6o6Jg9obvivPnCAm/wZvV3jWbYWfOuO/wrFJygn/jZqf8cR1T1CQa8CAwEAAQ=="
-    if verify_sign(pub_key, sign, data):
+    if verify_sign(pub_key, sign, content):
+        logging.debug("result: {}".format("Success"))
         return jsonify({"result": 0})
     else:
+        logging.debug("result: {}".format("Fail"))
         return jsonify({"result": 1})
