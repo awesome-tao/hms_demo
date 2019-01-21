@@ -11,6 +11,11 @@ import requests
 import rsa
 
 
+def sorted_dict(params_dict):
+    params_dict = collections.OrderedDict(sorted(params_dict.items()))
+    return params_dict
+
+
 def sign_data(private_key_str, data):
     """
     param: private_key_loc Path to your private key
@@ -55,6 +60,7 @@ def verify_sign(public_key_str, signature, data):
     if signer.verify(digest, b64decode(signature)):
         return True
     return False
+
 
 
 # 获取私钥

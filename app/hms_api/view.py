@@ -3,7 +3,7 @@ from flask import request, jsonify
 from urllib.parse import unquote_plus
 
 from app.hms_api import hms_api
-from app.hms_api.utils import GameCPService, get_private_key, verify_sign
+from app.hms_api.utils import GameCPService, get_private_key, verify_sign, sorted_dict
 
 
 
@@ -54,7 +54,8 @@ def userlogin():
 def pay_recall():
     # 获取源串
     content = ""
-    for i in request.form:
+    param_dict = sorted_dict(request.form)
+    for i in param_dict:
         if i != "sign" and i != "signType":
             content += "{}={}&".format(i, request.form.get(i))
         else:
@@ -62,6 +63,7 @@ def pay_recall():
     content = content.rstrip("&")
     logging.debug("content: {}".format(content))
     sign = request.form.get("sign")
+    logging.debug("sign: {}".format(sign))
 
     # 去除不参与验签的
     # 验签
